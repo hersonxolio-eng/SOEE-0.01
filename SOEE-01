@@ -3,205 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOEE - Panel de Control</title>
-    <!-- Tailwind CSS para estilos rápidos y modernos -->
+    <title>SOEE - Panel Interactivo</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Iconos de FontAwesome -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
     <style>
-        /* Transiciones suaves */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
+        /* Animación suave de entrada */
+        .fade-in-up { animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .active-btn {
-            background-color: #2563eb; /* Blue-600 */
+        /* Estilos del botón activo */
+        .btn-option { transition: all 0.3s ease; }
+        .btn-active {
+            background-color: #2563eb; /* Blue 600 */
             color: white;
             border-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
         }
+        .btn-active i { color: white !important; }
+        .btn-active p { opacity: 0.9; }
+        
+        /* Scrollbar personalizada sutil */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Encabezado / Header -->
-    <header class="bg-white shadow-md z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg">
-                    <i class="fa-solid fa-layer-group text-xl"></i>
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-20">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-tr from-blue-600 to-blue-500 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
+                        <i class="fa-solid fa-layer-group text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800 tracking-tight leading-none">SOEE</h1>
+                        <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Sistema de Gestión</p>
+                    </div>
                 </div>
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">SOEE</h1>
-            </div>
-            <div class="text-sm text-slate-500">
-                <span id="fecha-actual"></span>
+                <!-- Info Usuario -->
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-semibold text-slate-700">Admin</p>
+                        <p class="text-xs text-slate-400" id="current-date">--/--/----</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" class="w-full h-full">
+                    </div>
+                </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="flex-grow container mx-auto px-4 py-8">
-
-        <!-- Navegación de Opciones -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <!-- Botón Proyectos -->
-            <button onclick="showSection('proyectos')" id="btn-proyectos" class="active-btn p-6 rounded-xl bg-white shadow hover:shadow-lg transition-all border border-slate-200 flex flex-col items-center justify-center gap-3 group">
-                <div class="p-3 rounded-full bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i class="fa-solid fa-list-check text-2xl"></i>
+    <!-- Contenido Principal -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full">
+        
+        <!-- Grid de Botones de Navegación -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+            <button onclick="app.render('proyectos')" id="nav-proyectos" class="btn-option bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md flex items-center gap-4 group text-left relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-24 h-24 bg-blue-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 z-0"></div>
+                <div class="relative z-10 w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                    <i class="fa-solid fa-list-check"></i>
                 </div>
-                <h2 class="text-lg font-semibold">Proyectos</h2>
-                <p class="text-xs opacity-75">Gestión y Tareas</p>
+                <div class="relative z-10">
+                    <h2 class="font-bold text-lg">Proyectos</h2>
+                    <p class="text-xs text-slate-500">3 Activos</p>
+                </div>
             </button>
 
-            <!-- Botón Recursos Humanos -->
-            <button onclick="showSection('rrhh')" id="btn-rrhh" class="p-6 rounded-xl bg-white shadow hover:shadow-lg transition-all border border-slate-200 flex flex-col items-center justify-center gap-3 group text-slate-600">
-                <div class="p-3 rounded-full bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                    <i class="fa-solid fa-users text-2xl"></i>
+            <button onclick="app.render('rrhh')" id="nav-rrhh" class="btn-option bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md flex items-center gap-4 group text-left relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-24 h-24 bg-green-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 z-0"></div>
+                <div class="relative z-10 w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-xl group-hover:bg-green-600 group-hover:text-white transition-colors duration-300">
+                    <i class="fa-solid fa-users"></i>
                 </div>
-                <h2 class="text-lg font-semibold">Recursos Humanos</h2>
-                <p class="text-xs opacity-75">Personal y Talento</p>
+                <div class="relative z-10">
+                    <h2 class="font-bold text-lg">RR.HH.</h2>
+                    <p class="text-xs text-slate-500">Gestión de Talento</p>
+                </div>
             </button>
 
-            <!-- Botón Finanzas -->
-            <button onclick="showSection('finanzas')" id="btn-finanzas" class="p-6 rounded-xl bg-white shadow hover:shadow-lg transition-all border border-slate-200 flex flex-col items-center justify-center gap-3 group text-slate-600">
-                <div class="p-3 rounded-full bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                    <i class="fa-solid fa-chart-line text-2xl"></i>
+            <button onclick="app.render('finanzas')" id="nav-finanzas" class="btn-option bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md flex items-center gap-4 group text-left relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-24 h-24 bg-purple-50 rounded-full -mr-12 -mt-12 transition-transform group-hover:scale-150 z-0"></div>
+                <div class="relative z-10 w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
+                    <i class="fa-solid fa-chart-pie"></i>
                 </div>
-                <h2 class="text-lg font-semibold">Finanzas</h2>
-                <p class="text-xs opacity-75">Presupuesto y Reportes</p>
+                <div class="relative z-10">
+                    <h2 class="font-bold text-lg">Finanzas</h2>
+                    <p class="text-xs text-slate-500">Reportes & KPIs</p>
+                </div>
             </button>
         </div>
 
-        <!-- Contenedor Dinámico de Contenido -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 min-h-[300px]">
-
-            <!-- SECCIÓN: PROYECTOS -->
-            <div id="section-proyectos" class="fade-in block">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-blue-700 border-b-2 border-blue-500 pb-1">Estado de Proyectos</h3>
-                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">+ Nuevo Proyecto</button>
-                </div>
-
-                <div class="space-y-4">
-                    <!-- Proyecto 1 -->
-                    <div class="border rounded-lg p-4 hover:bg-slate-50 transition">
-                        <div class="flex justify-between mb-2">
-                            <span class="font-semibold">Desarrollo Web SOEE</span>
-                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">En Progreso</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
-                        </div>
-                        <p class="text-xs text-slate-500 mt-2">70% Completado - Entrega: 15 Oct</p>
-                    </div>
-                    <!-- Proyecto 2 -->
-                    <div class="border rounded-lg p-4 hover:bg-slate-50 transition">
-                        <div class="flex justify-between mb-2">
-                            <span class="font-semibold">Migración de Servidores</span>
-                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Pendiente</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5">
-                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 30%"></div>
-                        </div>
-                        <p class="text-xs text-slate-500 mt-2">30% Completado - Entrega: 20 Nov</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECCIÓN: RECURSOS HUMANOS -->
-            <div id="section-rrhh" class="fade-in hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-green-700 border-b-2 border-green-500 pb-1">Gestión de Personal</h3>
-                    <div class="text-sm text-slate-500">Total Empleados: <strong>42</strong></div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-green-50 p-4 rounded-lg border border-green-100">
-                        <h4 class="font-bold text-green-800 mb-2">Novedades</h4>
-                        <ul class="text-sm space-y-2 text-slate-700">
-                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Juan Pérez (IT) - Contratado</li>
-                            <li><i class="fa-solid fa-cake-candles text-pink-500 mr-2"></i>Cumpleaños de Ana - Mañana</li>
-                            <li><i class="fa-solid fa-briefcase-medical text-blue-500 mr-2"></i>Dr. López - Incapacidad</li>
-                        </ul>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 flex flex-col justify-center items-center text-center">
-                        <div class="text-4xl font-bold text-slate-700 mb-1">95%</div>
-                        <p class="text-sm text-slate-500">Asistencia Hoy</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECCIÓN: FINANZAS -->
-            <div id="section-finanzas" class="fade-in hidden">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-purple-700 border-b-2 border-purple-500 pb-1">Resumen Financiero</h3>
-                    <button class="text-purple-600 hover:underline text-sm">Descargar Reporte</button>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <!-- Tarjeta Ingresos -->
-                    <div class="bg-white p-4 rounded-lg border shadow-sm border-l-4 border-l-green-500">
-                        <p class="text-xs text-slate-500 uppercase">Ingresos Mes</p>
-                        <p class="text-2xl font-bold text-slate-800">$45,200</p>
-                    </div>
-                    <!-- Tarjeta Gastos -->
-                    <div class="bg-white p-4 rounded-lg border shadow-sm border-l-4 border-l-red-500">
-                        <p class="text-xs text-slate-500 uppercase">Gastos Operativos</p>
-                        <p class="text-2xl font-bold text-slate-800">$12,850</p>
-                    </div>
-                    <!-- Tarjeta Neto -->
-                    <div class="bg-white p-4 rounded-lg border shadow-sm border-l-4 border-l-blue-500">
-                        <p class="text-xs text-slate-500 uppercase">Beneficio Neto</p>
-                        <p class="text-2xl font-bold text-slate-800">$32,350</p>
-                    </div>
-                </div>
-
-                <div class="p-4 bg-slate-50 rounded text-center text-sm text-slate-500 italic">
-                    <i class="fa-solid fa-info-circle mr-1"></i> Datos actualizados al cierre de ayer.
-                </div>
-            </div>
-
+        <!-- Área de Contenido Dinámico -->
+        <div id="content-area" class="bg-white rounded-3xl shadow-sm border border-slate-200 min-h-[400px] p-6 md:p-8 relative overflow-hidden">
+            <!-- El JS inyectará el HTML aquí -->
         </div>
+
     </main>
 
-    <footer class="bg-white border-t py-4 text-center text-slate-400 text-sm">
-        &copy; 2023 SOEE System. Todos los derechos reservados.
-    </footer>
-
     <script>
-        // Función simple para poner la fecha
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('fecha-actual').textContent = new Date().toLocaleDateString('es-ES', options);
+        // Datos simulados (Database)
+        const db = {
+            proyectos: {
+                title: "Tablero de Proyectos",
+                desc: "Supervisión de entregas y estados",
+                theme: "blue",
+                list: [
+                    { name: "Rediseño Portal SOEE", status: "En Curso", progress: 75, due: "2 Semanas", team: 4, color: "blue" },
+                    { name: "API de Facturación", status: "Revisión", progress: 90, due: "3 Días", team: 2, color: "purple" },
+                    { name: "Migración Cloud", status: "Pausado", progress: 20, due: "TBD", team: 1, color: "orange" },
+                    { name: "App Móvil Interna", status: "Planificación", progress: 5, due: "1 Mes", team: 5, color: "slate" }
+                ]
+            },
+            rrhh: {
+                title: "Capital Humano",
+                desc: "Novedades y métricas del equipo",
+                theme: "green",
+                metrics: [
+                    { label: "Total Empleados", val: "48", icon: "fa-user-group", trend: "+2 este mes" },
+                    { label: "Ausencias Hoy", val: "1", icon: "fa-user-injured", trend: "Baja médica" },
+                ],
+                notices: [
+                    { title: "Evaluación Trimestral", date: "Hoy", type: "Importante" },
+                    { title: "Bienvenida a nuevos ingresos", date: "Ayer", type: "Social" }
+                ]
+            },
+            finanzas: {
+                title: "Resumen Financiero",
+                desc: "Flujo de caja y presupuestos Q3",
+                theme: "purple",
+                cards: [
+                    { title: "Ingresos Totales", val: "$124,500", sub: "+12% vs mes anterior", icon: "fa-arrow-trend-up", color: "green" },
+                    { title: "Gastos Operativos", val: "$42,200", sub: "Dentro del presupuesto", icon: "fa-wallet", color: "red" }
+                ],
+                budgets: [
+                    { dept: "Tecnología", used: 85, total: "50k" },
+                    { dept: "Marketing", used: 45, total: "20k" },
+                    { dept: "Administración", used: 60, total: "15k" }
+                ]
+            }
+        };
 
-        // Lógica de navegación
-        function showSection(sectionId) {
-            // 1. Ocultar todas las secciones
-            document.getElementById('section-proyectos').classList.add('hidden');
-            document.getElementById('section-rrhh').classList.add('hidden');
-            document.getElementById('section-finanzas').classList.add('hidden');
+        const app = {
+            // Inicialización
+            init: () => {
+                const now = new Date();
+                document.getElementById('current-date').innerText = now.toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' });
+                app.render('proyectos'); // Cargar vista inicial
+            },
 
-            // 2. Quitar estilos activos de todos los botones
-            const buttons = ['btn-proyectos', 'btn-rrhh', 'btn-finanzas'];
-            buttons.forEach(btnId => {
-                const btn = document.getElementById(btnId);
-                btn.classList.remove('active-btn', 'bg-blue-600', 'text-white'); // Quitar estilo activo
-                btn.classList.add('bg-white', 'text-slate-600'); // Volver a estilo inactivo
-                // Resetear el icono interno si fuera necesario, pero CSS group-hover lo maneja visualmente
-            });
+            // Renderizado principal
+            render: (section) => {
+                const container = document.getElementById('content-area');
+                const data = db[section];
+                
+                // Actualizar clases de botones
+                document.querySelectorAll('.btn-option').forEach(btn => {
+                    btn.classList.remove('btn-active');
+                    btn.classList.add('bg-white', 'text-slate-800'); // Reset
+                });
+                
+                const activeBtn = document.getElementById(`nav-${section}`);
+                activeBtn.classList.remove('bg-white', 'text-slate-800');
+                activeBtn.classList.add('btn-active');
 
-            // 3. Mostrar la sección seleccionada
-            const selectedSection = document.getElementById('section-' + sectionId);
-            selectedSection.classList.remove('hidden');
+                // Construir HTML basado en la sección
+                let html = `
+                    <div class="fade-in-up">
+                        <header class="mb-8 flex justify-between items-end border-b border-slate-100 pb-4">
+                            <div>
+                                <h2 class="text-2xl font-bold text-slate-800">${data.title}</h2>
+                                <p class="text-slate-500 text-sm mt-1">${data.desc}</p>
+                            </div>
+                            <div class="bg-${data.theme}-50 text-${data.theme}-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                                Vista ${section}
+                            </div>
+                        </header>
+                `;
 
-            // 4. Activar el botón seleccionado
-            const activeBtn = document.getElementById('btn-' + sectionId);
-            activeBtn.classList.remove('bg-white', 'text-slate-600');
-            activeBtn.classList.add('active-btn');
-        }
+                // VISTA PROYECTOS
+                if (section === 'proyectos') {
+                    html += `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+                    data.list.forEach(p => {
+                        html += `
+                            <div class="border border-slate-100 bg-slate-50/50 p-5 rounded-xl hover:bg-white hover:shadow-md transition-all group">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="bg-white p-2 rounded-lg shadow-sm text-${p.color}-500">
+                                        <i class="fa-solid fa-cube"></i>
+                                    </div>
+                                    <span class="text-xs font-medium px-2 py-1 rounded bg-slate-200 text-slate-600">${p.status}</span>
+                                </div>
+                                <h3 class="font-bold text-slate-700 mb-1 group-hover:text-blue-600 transition-colors">${p.name}</h3>
+                                <div class="flex justify-between text-xs text-slate-400 mb-3">
+                                    <span><i class="fa-regular fa-clock mr-1"></i> ${p.due}</span>
+                                    <span><i class="fa-solid fa-users mr-1"></i> ${p.team} devs</span>
+                                </div>
+                                <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                                    <div class="bg-${p.color}-500 h-1.5 rounded-full" style="width: ${p.progress}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+
+                // VISTA RRHH
+                if (section === 'rrhh') {
+                    html += `
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Métricas -->
+                            ${data.metrics.map(m => `
+                                <div class="bg-gradient-to-br from-green-50 to-white border border-green-100 p-5 rounded-2xl">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <p class="text-slate-500 text-xs uppercase font-bold">${m.label}</p>
+                                            <p class="text-3xl font-bold text-slate-800 mt-1">${m.val}</p>
+                                        </div>
+                                        <div class="text-green-500 bg-white p-2 rounded-full shadow-sm"><i class="fa-solid ${m.icon}"></i></div>
+                                    </div>
+                                    <p class="text-xs text-green-600 mt-3 font-medium bg-green-100/50 inline-block px-2 py-1 rounded">${m.trend}</p>
+                                </div>
+                            `).join('')}
+                            
+                            <!-- Panel de Avisos (ocupa el espacio restante si es desktop) -->
+                            <div class="md:col-span-1 bg-slate-800 text-white p-5 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+                                <i class="fa-solid fa-bullhorn absolute -right-4 -bottom-4 text-8xl text-slate-700 opacity-20"></i>
+                                <div>
+                                    <h4 class="font-bold border-b border-slate-600 pb-2 mb-3">Tablón de Avisos</h4>
+                                    <ul class="space-y-3">
+                                        ${data.notices.map(n => `
+                                            <li class="text-sm border-l-2 border-green-400 pl-3">
+                                                <p class="font-medium">${n.title}</p>
+                                                <p class="text-xs text-slate-400">${n.date} - ${n.type}</p>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                                <button class="mt-4 w-full bg-green-500 hover:bg-green-600 text-white text-xs py-2 rounded transition">Ver Todo</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // VISTA FINANZAS
+                if (section === 'finanzas') {
+                    html += `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            ${data.cards.map(c => `
+                                <div class="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm">
+                                    <div class="w-12 h-12 rounded-full bg-${c.color}-50 text-${c.color}-500 flex items-center justify-center text-xl mr-4">
+                                        <i class="fa-solid ${c.icon}"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-xs uppercase font-bold">${c.title}</p>
+                                        <p class="text-2xl font-bold text-slate-800">${c.val}</p>
+                                        <p class="text-xs text-${c.color}-600 font-medium">${c.sub}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="bg-slate-50 rounded-xl p-5 border border-slate-200">
+                            <h4 class="text-sm font-bold text-slate-700 mb-4 uppercase tracking-wide">Ejecución Presupuestaria por Dpto.</h4>
+                            <div class="space-y-4">
+                                ${data.budgets.map(b => `
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-1">
+                                            <span class="font-semibold text-slate-600">${b.dept}</span>
+                                            <span class="text-slate-500">${b.used}% de ${b.total}</span>
+                                        </div>
+                                        <div class="w-full bg-white border border-slate-200 rounded-full h-3 p-0.5">
+                                            <div class="bg-gradient-to-r from-purple-500 to-indigo-500 h-full rounded-full transition-all duration-1000" style="width: ${b.used}%"></div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `</div>`; // Cerrar container y fade
+                container.innerHTML = html;
+            }
+        };
+
+        // Iniciar
+        app.init();
     </script>
 </body>
 </html>
