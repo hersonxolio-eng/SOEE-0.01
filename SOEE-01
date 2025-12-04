@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOEE - Panel de Control</title>
+    <!-- Tailwind CSS para estilos rápidos y modernos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos de FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Transiciones suaves */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .active-btn {
+            background-color: #2563eb; /* Blue-600 */
+            color: white;
+            border-color: #2563eb;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Encabezado / Header -->
+    <header class="bg-white shadow-md z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-layer-group text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight text-slate-900">SOEE</h1>
+            </div>
+            <div class="text-sm text-slate-500">
+                <span id="fecha-actual"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+
+        <!-- Navegación de Opciones -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <!-- Botón Proyectos -->
+            <button onclick="showSection('proyectos')" id="btn-proyectos" class="active-btn p-6 rounded-xl bg-white shadow hover:shadow-lg transition-all border border-slate-200 flex flex-col items-center justify-center gap-3 group">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-list-check text-2xl"></i>
+                </div>
+                <h2 class="text-lg font-semibold">Proyectos</h2>
+                <p class="text-xs opacity-75">Gestión y Tareas</p>
+            </button>
+
+            <!-- Botón Recursos Humanos -->
+            <button onclick="showSection('rrhh')" id="btn-rrhh" class="p-6 rounded-xl bg-white shadow hover:shadow-lg transition-all border border-slate-200 flex flex-col items-center justify-center gap-3 group text-slate-600">
+                <div class="p-3 rounded-full bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-users text-2xl"></i>
+                </div>
+                <h2 class="text-lg font-semibold">Recursos Humanos</h2>
+                <p class="text-xs opacity-75">Personal y Talento</p>
+            </button>
+
+            <!-- Botón Finanzas -->
+            <button onclick="showSection('finanzas')" id="btn-finanzas" class="p-6 rounded-xl bg-white shadow hover:shadow-lg transition-all border border-slate-200 flex flex-col items-center justify-center gap-3 group text-slate-600">
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                    <i class="fa-solid fa-chart-line text-2xl"></i>
+                </div>
+                <h2 class="text-lg font-semibold">Finanzas</h2>
+                <p class="text-xs opacity-75">Presupuesto y Reportes</p>
+            </button>
+        </div>
+
+        <!-- Contenedor Dinámico de Contenido -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 min-h-[300px]">
+
+            <!-- SECCIÓN: PROYECTOS -->
+            <div id="section-proyectos" class="fade-in block">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-blue-700 border-b-2 border-blue-500 pb-1">Estado de Proyectos</h3>
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">+ Nuevo Proyecto</button>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Proyecto 1 -->
+                    <div class="border rounded-lg p-4 hover:bg-slate-50 transition">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold">Desarrollo Web SOEE</span>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">En Progreso</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 70%"></div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">70% Completado - Entrega: 15 Oct</p>
+                    </div>
+                    <!-- Proyecto 2 -->
+                    <div class="border rounded-lg p-4 hover:bg-slate-50 transition">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold">Migración de Servidores</span>
+                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Pendiente</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 30%"></div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">30% Completado - Entrega: 20 Nov</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: RECURSOS HUMANOS -->
+            <div id="section-rrhh" class="fade-in hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-green-700 border-b-2 border-green-500 pb-1">Gestión de Personal</h3>
+                    <div class="text-sm text-slate-500">Total Empleados: <strong>42</strong></div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                        <h4 class="font-bold text-green-800 mb-2">Novedades</h4>
+                        <ul class="text-sm space-y-2 text-slate-700">
+                            <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Juan Pérez (IT) - Contratado</li>
+                            <li><i class="fa-solid fa-cake-candles text-pink-500 mr-2"></i>Cumpleaños de Ana - Mañana</li>
+                            <li><i class="fa-solid fa-briefcase-medical text-blue-500 mr-2"></i>Dr. López - Incapacidad</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 flex flex-col justify-center items-center text-center">
+                        <div class="text-4xl font-bold text-slate-700 mb-1">95%</div>
+                        <p class="text-sm text-slate-500">Asistencia Hoy</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: FINANZAS -->
+            <div id="section-finanzas" class="fade-in hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-purple-700 border-b-2 border-purple-500 pb-1">Resumen Financiero</h3>
+                    <button class="text-purple-600 hover:underline text-sm">Descargar Reporte</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- Tarjeta Ingresos -->
+                    <div class="bg-white p-4 rounded-lg border shadow-sm border-l-4 border-l-green-500">
+                        <p class="text-xs text-slate-500 uppercase">Ingresos Mes</p>
+                        <p class="text-2xl font-bold text-slate-800">$45,200</p>
+                    </div>
+                    <!-- Tarjeta Gastos -->
+                    <div class="bg-white p-4 rounded-lg border shadow-sm border-l-4 border-l-red-500">
+                        <p class="text-xs text-slate-500 uppercase">Gastos Operativos</p>
+                        <p class="text-2xl font-bold text-slate-800">$12,850</p>
+                    </div>
+                    <!-- Tarjeta Neto -->
+                    <div class="bg-white p-4 rounded-lg border shadow-sm border-l-4 border-l-blue-500">
+                        <p class="text-xs text-slate-500 uppercase">Beneficio Neto</p>
+                        <p class="text-2xl font-bold text-slate-800">$32,350</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-slate-50 rounded text-center text-sm text-slate-500 italic">
+                    <i class="fa-solid fa-info-circle mr-1"></i> Datos actualizados al cierre de ayer.
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t py-4 text-center text-slate-400 text-sm">
+        &copy; 2023 SOEE System. Todos los derechos reservados.
+    </footer>
+
+    <script>
+        // Función simple para poner la fecha
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('fecha-actual').textContent = new Date().toLocaleDateString('es-ES', options);
+
+        // Lógica de navegación
+        function showSection(sectionId) {
+            // 1. Ocultar todas las secciones
+            document.getElementById('section-proyectos').classList.add('hidden');
+            document.getElementById('section-rrhh').classList.add('hidden');
+            document.getElementById('section-finanzas').classList.add('hidden');
+
+            // 2. Quitar estilos activos de todos los botones
+            const buttons = ['btn-proyectos', 'btn-rrhh', 'btn-finanzas'];
+            buttons.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                btn.classList.remove('active-btn', 'bg-blue-600', 'text-white'); // Quitar estilo activo
+                btn.classList.add('bg-white', 'text-slate-600'); // Volver a estilo inactivo
+                // Resetear el icono interno si fuera necesario, pero CSS group-hover lo maneja visualmente
+            });
+
+            // 3. Mostrar la sección seleccionada
+            const selectedSection = document.getElementById('section-' + sectionId);
+            selectedSection.classList.remove('hidden');
+
+            // 4. Activar el botón seleccionado
+            const activeBtn = document.getElementById('btn-' + sectionId);
+            activeBtn.classList.remove('bg-white', 'text-slate-600');
+            activeBtn.classList.add('active-btn');
+        }
+    </script>
+</body>
+</html>
