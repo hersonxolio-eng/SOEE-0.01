@@ -1,0 +1,268 @@
+import React, { useState } from 'react';
+import { Layers, ClipboardList, Users, PieChart, Clock, TrendingUp, AlertCircle, CheckCircle, Wallet, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+
+const SOEEPanel = () => {
+  // Estado para controlar la sección activa
+  const [activeSection, setActiveSection] = useState('proyectos');
+
+  // Base de datos (Simulada en un objeto JS constante)
+  const db = {
+    proyectos: {
+      title: "Gestión de Proyectos",
+      desc: "Supervisión de entregas y cronogramas",
+      theme: "blue",
+      list: [
+        { name: "Rediseño Portal SOEE", status: "En Curso", progress: 75, due: "2 Semanas", team: 4, color: "bg-blue-500" },
+        { name: "API de Facturación", status: "Revisión", progress: 90, due: "3 Días", team: 2, color: "bg-purple-500" },
+        { name: "Migración Cloud", status: "Pausado", progress: 20, due: "TBD", team: 1, color: "bg-orange-500" },
+        { name: "App Móvil Interna", status: "Planificación", progress: 5, due: "1 Mes", team: 5, color: "bg-slate-500" }
+      ]
+    },
+    rrhh: {
+      title: "Recursos Humanos",
+      desc: "Capital humano y novedades",
+      theme: "green",
+      metrics: [
+        { label: "Total Empleados", val: "48", trend: "+2 este mes", icon: Users },
+        { label: "Ausencias Hoy", val: "1", trend: "Baja médica", icon: AlertCircle },
+      ],
+      notices: [
+        { title: "Evaluación Trimestral", date: "Hoy", type: "Importante" },
+        { title: "Bienvenida a nuevos ingresos", date: "Ayer", type: "Social" }
+      ]
+    },
+    finanzas: {
+      title: "Finanzas Corporativas",
+      desc: "Flujo de caja y presupuestos Q3",
+      theme: "purple",
+      cards: [
+        { title: "Ingresos Totales", val: "$124,500", sub: "+12% vs mes anterior", color: "text-green-600", icon: ArrowUpRight },
+        { title: "Gastos Operativos", val: "$42,200", sub: "Dentro del presupuesto", color: "text-red-500", icon: ArrowDownRight }
+      ],
+      budgets: [
+        { dept: "Tecnología", used: 85, total: "50k" },
+        { dept: "Marketing", used: 45, total: "20k" },
+        { dept: "Administración", used: 60, total: "15k" }
+      ]
+    }
+  };
+
+  // Función para obtener la fecha actual
+  const getCurrentDate = () => {
+    return new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  };
+
+  // Renderizado condicional del contenido
+  const renderContent = () => {
+    const data = db[activeSection];
+    
+    // Contenido: PROYECTOS
+    if (activeSection === 'proyectos') {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {data.list.map((project, idx) => (
+            <div key={idx} className="border border-slate-100 bg-slate-50/50 p-5 rounded-xl hover:bg-white hover:shadow-md transition-all group">
+              <div className="flex justify-between items-start mb-3">
+                <div className="bg-white p-2 rounded-lg shadow-sm text-blue-500">
+                  <ClipboardList size={20} />
+                </div>
+                <span className="text-xs font-medium px-2 py-1 rounded bg-slate-200 text-slate-600">{project.status}</span>
+              </div>
+              <h3 className="font-bold text-slate-700 mb-1 group-hover:text-blue-600 transition-colors">{project.name}</h3>
+              <div className="flex justify-between text-xs text-slate-400 mb-3">
+                <span className="flex items-center gap-1"><Clock size={12} /> {project.due}</span>
+                <span className="flex items-center gap-1"><Users size={12} /> {project.team} devs</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div className={`${project.color} h-1.5 rounded-full`} style={{ width: `${project.progress}%` }}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // Contenido: RRHH
+    if (activeSection === 'rrhh') {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {data.metrics.map((m, idx) => (
+            <div key={idx} className="bg-gradient-to-br from-green-50 to-white border border-green-100 p-5 rounded-2xl shadow-sm">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-slate-500 text-xs uppercase font-bold">{m.label}</p>
+                  <p className="text-3xl font-bold text-slate-800 mt-1">{m.val}</p>
+                </div>
+                <div className="text-green-500 bg-white p-2 rounded-full shadow-sm">
+                  <m.icon size={20} />
+                </div>
+              </div>
+              <p className="text-xs text-green-700 mt-3 font-medium bg-green-100/50 inline-block px-2 py-1 rounded">{m.trend}</p>
+            </div>
+          ))}
+          
+          <div className="md:col-span-1 bg-slate-800 text-white p-5 rounded-2xl flex flex-col justify-between relative overflow-hidden shadow-lg">
+            <div className="absolute -right-6 -bottom-6 opacity-10">
+               <Layers size={120} />
+            </div>
+            <div>
+              <h4 className="font-bold border-b border-slate-600 pb-2 mb-3 flex items-center gap-2">
+                <CheckCircle size={16} className="text-green-400"/> Tablón de Avisos
+              </h4>
+              <ul className="space-y-3">
+                {data.notices.map((n, idx) => (
+                  <li key={idx} className="text-sm border-l-2 border-green-400 pl-3">
+                    <p className="font-medium">{n.title}</p>
+                    <p className="text-xs text-slate-400">{n.date} - {n.type}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Contenido: FINANZAS
+    if (activeSection === 'finanzas') {
+      return (
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {data.cards.map((c, idx) => (
+              <div key={idx} className="flex items-center p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                <div className={`w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center mr-4 ${c.color}`}>
+                  <c.icon size={24} />
+                </div>
+                <div>
+                  <p className="text-slate-400 text-xs uppercase font-bold">{c.title}</p>
+                  <p className="text-2xl font-bold text-slate-800">{c.val}</p>
+                  <p className={`text-xs font-medium ${c.color}`}>{c.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+            <h4 className="text-sm font-bold text-slate-700 mb-4 uppercase tracking-wide flex items-center gap-2">
+              <Wallet size={16} /> Ejecución Presupuestaria
+            </h4>
+            <div className="space-y-5">
+              {data.budgets.map((b, idx) => (
+                <div key={idx}>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="font-semibold text-slate-600">{b.dept}</span>
+                    <span className="text-slate-500">{b.used}% de {b.total}</span>
+                  </div>
+                  <div className="w-full bg-white border border-slate-200 rounded-full h-3 p-0.5">
+                    <div 
+                      className="bg-gradient-to-r from-purple-500 to-indigo-500 h-full rounded-full transition-all duration-1000" 
+                      style={{ width: `${b.used}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+
+  // Botón de Navegación Reutilizable
+  const NavButton = ({ id, label, icon: Icon, themeColor, subtitle }) => {
+    const isActive = activeSection === id;
+    
+    // Definir estilos según estado activo/inactivo
+    const activeClasses = isActive 
+      ? `bg-${themeColor}-600 text-white shadow-lg scale-105 ring-2 ring-${themeColor}-200 ring-offset-2` 
+      : "bg-white text-slate-600 hover:bg-slate-50 hover:shadow-md border border-slate-200";
+
+    const iconClasses = isActive 
+      ? "text-white" 
+      : `text-${themeColor}-500`;
+
+    return (
+      <button 
+        onClick={() => setActiveSection(id)}
+        className={`${activeClasses} p-4 rounded-xl transition-all duration-300 flex items-center gap-4 text-left group w-full`}
+      >
+        <div className={`p-3 rounded-lg ${isActive ? 'bg-white/20' : 'bg-slate-100'} transition-colors`}>
+          <Icon size={24} className={isActive ? 'text-white' : `text-${themeColor}-500`} />
+        </div>
+        <div>
+          <h2 className="font-bold text-lg leading-tight">{label}</h2>
+          <p className={`text-xs ${isActive ? 'text-white/80' : 'text-slate-400'}`}>{subtitle}</p>
+        </div>
+      </button>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 p-4 md:p-8">
+      <div className="max-w-5xl mx-auto">
+        
+        {/* Header */}
+        <header className="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-600 text-white p-2.5 rounded-xl shadow-blue-200 shadow-lg">
+              <Layers size={24} />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900">SOEE</h1>
+              <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Panel de Control React</p>
+            </div>
+          </div>
+          <div className="hidden md:block text-right">
+             <p className="text-sm font-semibold text-slate-700 capitalize">{getCurrentDate()}</p>
+             <p className="text-xs text-slate-400">Sistema v2.0 (JS)</p>
+          </div>
+        </header>
+
+        {/* Navegación */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <NavButton 
+            id="proyectos" 
+            label="Proyectos" 
+            subtitle="Gestión y Tareas"
+            icon={ClipboardList} 
+            themeColor="blue" 
+          />
+          <NavButton 
+            id="rrhh" 
+            label="Recursos Humanos" 
+            subtitle="Personal y Talento"
+            icon={Users} 
+            themeColor="green" 
+          />
+          <NavButton 
+            id="finanzas" 
+            label="Finanzas" 
+            subtitle="Presupuesto y ROI"
+            icon={PieChart} 
+            themeColor="purple" 
+          />
+        </div>
+
+        {/* Área de Contenido Principal */}
+        <main className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8 min-h-[450px]">
+          <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+            <div>
+              <h2 className="text-2xl font-bold text-slate-800">{db[activeSection].title}</h2>
+              <p className="text-slate-500 text-sm">{db[activeSection].desc}</p>
+            </div>
+            {/* Badge de Sección */}
+            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-500`}>
+              {activeSection}
+            </span>
+          </div>
+
+          {/* Renderizado Dinámico */}
+          {renderContent()}
+        </main>
+
+      </div>
+    </div>
+  );
+};
+
+export default SOEEPanel;
